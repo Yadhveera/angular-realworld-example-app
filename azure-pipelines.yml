@@ -26,11 +26,6 @@ stages:
         versionSpec: '20.x'
       displayName: 'Install Node.js'
 
-    # Step 3: Install dependencies
-    - script: |
-        npm ci
-      displayName: 'Install dependencies'
-
     # Step 4: Lint
     - script: |
         npm run lint
