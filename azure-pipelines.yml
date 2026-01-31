@@ -44,11 +44,11 @@ stages:
 
 - stage: Publish
   displayName: 'Publish Stage'
+  dependsOn: Build
+  condition: succeeded()
   jobs:
   - job: Publish
     displayName: 'Publish Job'
-    dependsOn: Build
-    condition: succeeded()
     steps:
     - task: PublishPipelineArtifact@1
       inputs:
