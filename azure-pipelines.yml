@@ -44,27 +44,3 @@ stages:
         npm install
         npm run build
       displayName: 'npm install and build'
-- task: NodeTool@0
-  inputs:
-    versionSpec: '20.x'
-  displayName: 'Install Node.js'
-
-# Step 3: Install dependencies
-- script: |
-    npm ci
-  displayName: 'Install dependencies'
-
-# Step 4: Lint
-- script: |
-    npm run lint
-  displayName: 'Run lint'
-
-# Step 5: Run unit tests
-- script: |
-    npm run test -- --watch=false --browsers=ChromeHeadless
-  displayName: 'Run unit tests'
-
-- script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
