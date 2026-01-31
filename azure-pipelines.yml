@@ -10,6 +10,10 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  template: 'variables.yml'
+  name: 'Angular-$(major).$(minor).$(patch)-$(Build.BuildId)'
+
 stages:
 - stage: Build
   displayName: 'Build Stage'
@@ -19,24 +23,35 @@ stages:
     steps:
     # Step 1: Checkout code
     - checkout: self
-
     # Step 2: Use Node.js version 20.x
     - task: NodeTool@0
       inputs:
         versionSpec: '20.x'
       displayName: 'Install Node.js'
-
     # Step 4: Lint
     - script: |
         npm run lint
       displayName: 'Run lint'
-
     # Step 5: Run unit tests
     - script: |
         npm run test -- --watch=false --browsers=ChromeHeadless
       displayName: 'Run unit tests'
-
     - script: |
         npm install
         npm run build
       displayName: 'npm install and build'
+
+
+- stage: Publish
+  displayName: 'Publish Stage'
+  jobs:
+  - job: Publish
+    displayName: 'Publish Job'
+    dependsOn: Build
+    condition: succeeded()
+    steps:
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(Pipeline.Workspace)'
+        artifact: 'angular-app'
+        publishLocation: 'pipeline'
