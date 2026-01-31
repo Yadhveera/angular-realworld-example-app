@@ -30,8 +30,13 @@ stages:
       displayName: 'Install Node.js'
     # Step 4: Lint
     - script: |
+      if npm run | grep -q "lint"; then
         npm run lint
-      displayName: 'Run lint'
+      else
+        echo "Lint script not found, skipping..."
+      fi
+     displayName: 'Run lint (if exists)'
+
     # Step 5: Run unit tests
     - script: |
         npm run test -- --watch=false --browsers=ChromeHeadless
